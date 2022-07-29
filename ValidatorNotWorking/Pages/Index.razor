@@ -1,0 +1,43 @@
+﻿@page "/"
+@using ValidatorNotWorking.Components.Dialogs
+
+<MudButton DisableElevation Class="mr-1" Variant="Variant.Filled" Color="Color.Primary" OnClick="ShowAddEditCustomerDialog" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">Add Customer</MudButton>
+<MudButton DisableElevation Class="mr-1" Variant="Variant.Filled" Color="Color.Primary" OnClick="ShowRegisterDialog" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">Register</MudButton>
+
+@code {
+
+    private async Task ShowAddEditCustomerDialog()
+    {
+        var parameters = new DialogParameters();
+        var options = new DialogOptions
+        {
+            CloseButton = true,
+            MaxWidth = MaxWidth.Medium,
+            FullWidth = true,
+            DisableBackdropClick = true
+        };
+        var dialog = DialogService.Show<AddEditCustomer>(
+            "Customer",
+            parameters,
+            options);
+        await dialog.Result;
+    }
+    
+    private async Task ShowRegisterDialog()
+    {
+        var parameters = new DialogParameters();
+        var options = new DialogOptions
+        {
+            CloseButton = true,
+            MaxWidth = MaxWidth.Medium,
+            FullWidth = true,
+            DisableBackdropClick = true
+        };
+        var dialog = DialogService.Show<Register>(
+            "Register",
+            parameters,
+            options);
+        await dialog.Result;
+    }
+
+}

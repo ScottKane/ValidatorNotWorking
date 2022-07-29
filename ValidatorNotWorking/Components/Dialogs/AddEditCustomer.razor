@@ -1,0 +1,55 @@
+﻿@using Microsoft.AspNetCore.Components
+@using Blazored.FluentValidation
+@using ValidatorNotWorking.Requests
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1"/>
+            Add Customer
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <EditForm Model="@Model">
+            <FluentValidationValidator @ref="@_validator" />
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudTextField For="@(() => Model.FirstName)" @bind-Value="Model.FirstName" Immediate="true" Label="First Name"/>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField For="@(() => Model.LastName)" @bind-Value="Model.LastName" Immediate="true" Label="Last Name"/>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="Model.Email" For="@(() => Model.Email)" Immediate="true" Label="Email"/>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="Model.Number" For="@(() => Model.Number)" Immediate="true" Label="House Number"/>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="Model.Street" For="@(() => Model.Street)" Immediate="true" Label="Street"/>
+                </MudItem>
+            </MudGrid>
+        </EditForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">Cancel</MudButton>
+        <MudButton OnClick="SubmitAsync" DisableElevation Variant="Variant.Filled" Disabled="@(!Validated)" Color="Color.Secondary">@(Model.Id != 0 ? "Update" : "Save")</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private FluentValidationValidator _validator;
+    
+    [Parameter] public AddEditCustomerCommand Model { get; set; } = new();
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = default!;
+    
+    
+    private bool Validated => _validator.Validate(options => { options.IncludeAllRuleSets(); });
+
+    private async Task SubmitAsync()
+    {
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    private void Cancel() => MudDialog.Cancel();
+}
